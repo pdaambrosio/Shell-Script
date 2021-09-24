@@ -8,10 +8,9 @@ SNAPSHOT=$(curl -s -XGET $HOSTNAME:9200/_cat/snapshots/backup?pretty |egrep "SUC
 printf "DATA --- $DATE\n MASTER ---- $MASTER\n VALIDAR ---- $VALIDATE\n CURL ----- $CURL\n SNAPSHOT ---- $SNAPSHOT\n\n"
 
 if [ "$VALIDATE" == "logstash-$DATE" ]; then
-                echo "index already exists"
+echo "index already exists"
 elif [ "$MASTER" != "$HOSTNAME" ]; then
-                echo "it's not the master"
+echo "it's not the master"
 else
-               curl -XPOST $HOSTNAME:9200/_snapshot/backup/$SNAPSHOT/_restore?pretty -d '{"indices":"logstash-'$DATE'"}'
-
+curl -XPOST $HOSTNAME:9200/_snapshot/backup/$SNAPSHOT/_restore?pretty -d '{"indices":"logstash-'$DATE'"}'
 fi
